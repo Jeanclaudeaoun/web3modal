@@ -4,6 +4,7 @@ import type { CreateConfigParameters, CreateConnectorFn, Config } from 'wagmi'
 import { createConfig } from 'wagmi'
 import { coinbaseWallet, walletConnect, injected } from 'wagmi/connectors'
 import { authConnector } from '../connectors/AuthConnector.js'
+import { bonuzConnector } from '../connectors/bonuzConnector.js'
 import { getTransport } from './helpers.js'
 import type { SocialProvider } from '@web3modal/scaffold-utils'
 
@@ -57,6 +58,12 @@ export function defaultWagmiConfig({
     connectors.push(injected({ shimDisconnect: true }))
   }
 
+    // Enabled by default
+  if (enableBonuz !== false) {
+    connectors.push(bonuzConnector({ projectId, metadata, showQrModal: false }))
+  }
+
+
   if (enableCoinbase !== false) {
     connectors.push(
       coinbaseWallet({
@@ -79,6 +86,7 @@ export function defaultWagmiConfig({
       })
     )
   }
+
 
   return createConfig({
     chains,
